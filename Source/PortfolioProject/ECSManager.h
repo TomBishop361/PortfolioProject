@@ -1,0 +1,35 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Subsystems/GameInstanceSubsystem.h"
+#include "ECSManager.generated.h"
+/**
+ * 
+ */
+using EntityID = uint32;
+UCLASS()
+class PORTFOLIOPROJECT_API UECSManager : public UGameInstanceSubsystem
+{
+	GENERATED_BODY()
+public:
+	EntityID CreateEntity();
+	void DestroyEntity(EntityID entity);
+	bool isEntityValid(EntityID entity) const;
+
+	template<typename T>
+	void AddComponent(EntityID entity, const T& component);
+
+	template<typename T>
+	T* GetComponent(EntityID entity);
+
+
+
+private:
+	EntityID nextEntityID = 0;
+	TSet<EntityID> ActiveEntities;
+
+	TMap<FName, TSharedPtr<void>> ComponentStorage;
+};
+
