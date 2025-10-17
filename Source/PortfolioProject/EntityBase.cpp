@@ -19,7 +19,7 @@ void AEntityBase::BeginPlay()
 	Super::BeginPlay();
 	if (UGameInstance* GameInstance = GetGameInstance()) {
 		if (UECSManager* ECS = GameInstance->GetSubsystem<UECSManager>()) {
-			EntityID E = ECS->CreateEntity();
+			eID = ECS->CreateEntity();
 		}
 	}
 }

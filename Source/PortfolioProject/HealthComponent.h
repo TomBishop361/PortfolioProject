@@ -3,19 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ComponentStructBase.h"
 #include "HealthComponent.generated.h"
-/**
- * 
- */
+
+
+
 USTRUCT(BlueprintType)
-struct FHealthComponent
+struct FHealthComponent : public FComponentStructBase
 {
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxHealth;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int CurrentHealth;
-
-	
 
 };
