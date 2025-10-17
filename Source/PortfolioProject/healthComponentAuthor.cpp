@@ -5,6 +5,9 @@
 
 
 
-void UhealthComponentAuthor::AuthorComponent(int e, FHealthComponent healthComponent)
+
+void UhealthComponentAuthor::AddToEntity(EntityID entity, UECSManager* ecs)
 {
+	
+	ecs->AddComponent(entity, HealthData);
 }

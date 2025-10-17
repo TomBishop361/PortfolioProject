@@ -2,7 +2,6 @@
 
 
 #include "EntityBase.h"
-#include "ECSManager.h"
 #include "Engine/GameInstance.h"
 
 // Sets default values
@@ -19,7 +18,13 @@ void AEntityBase::BeginPlay()
 	Super::BeginPlay();
 	if (UGameInstance* GameInstance = GetGameInstance()) {
 		if (UECSManager* ECS = GameInstance->GetSubsystem<UECSManager>()) {
-			eID = ECS->CreateEntity();
+			EntityID e = ECS->CreateEntity();
+		}
+	}
+
+	for (UcomponentAuthorBase* author : ecsComponents) {
+		if (author) {
+			//author->AddToEntity(e,ecs)
 		}
 	}
 }

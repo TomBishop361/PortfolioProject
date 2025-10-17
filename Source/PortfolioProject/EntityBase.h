@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "ECSManager.h"
+#include "componentAuthorBase.h"
 #include "EntityBase.generated.h"
 
 
@@ -14,16 +16,16 @@ class PORTFOLIOPROJECT_API AEntityBase : public AActor
 	GENERATED_BODY()
 	
 public:	
-	
-	
+	UPROPERTY(EditAnywhere, Instanced, Category = "ECS")
+	TArray<UcomponentAuthorBase*> ecsComponents;
 	
 	// Sets default values for this actor's properties
 	AEntityBase();	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int eID;
+	
+	EntityID e;
 	
 
 

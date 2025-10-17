@@ -4,19 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "HealthComponent.h"
+#include "componentAuthorBase.h"
 #include "healthComponentAuthor.generated.h"
 
 /**
  * 
  */
 UCLASS(Blueprintable)
-class PORTFOLIOPROJECT_API UhealthComponentAuthor : public UBlueprintFunctionLibrary
+class PORTFOLIOPROJECT_API UhealthComponentAuthor : public UcomponentAuthorBase
 {
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "ECSComponent")
-	void AuthorComponent(int e, FHealthComponent healthComponent);
+	FHealthComponent HealthData;
+	
+	virtual void AddToEntity(EntityID entity, UECSManager* ecs) override;
 
 private:	
 	
