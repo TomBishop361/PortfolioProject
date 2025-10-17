@@ -15,18 +15,21 @@ AEntityBase::AEntityBase()
 // Called when the game starts or when spawned
 void AEntityBase::BeginPlay()
 {
+	
 	Super::BeginPlay();
 	if (UGameInstance* GameInstance = GetGameInstance()) {
 		if (UECSManager* ECS = GameInstance->GetSubsystem<UECSManager>()) {
-			EntityID e = ECS->CreateEntity();
-		}
-	}
+			e = ECS->CreateEntity();
 
-	for (UcomponentAuthorBase* author : ecsComponents) {
-		if (author) {
-			//author->AddToEntity(e,ecs)
+			for (UcomponentAuthorBase* author : ecsComponents) {
+				if (author) {
+
+					author->AddToEntity(e, ECS);
+				}
+			}
 		}
 	}
+	
 }
 
 // Called every frame

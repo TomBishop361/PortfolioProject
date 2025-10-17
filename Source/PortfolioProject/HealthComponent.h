@@ -3,13 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ComponentStructBase.h"
 #include "HealthComponent.generated.h"
 
 
 
 USTRUCT(BlueprintType)
-struct FHealthComponent : public FComponentStructBase
+struct FHealthComponent 
 {
 	GENERATED_BODY()
 

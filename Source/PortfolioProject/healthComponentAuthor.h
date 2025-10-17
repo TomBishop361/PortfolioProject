@@ -17,9 +17,9 @@ class PORTFOLIOPROJECT_API UhealthComponentAuthor : public UcomponentAuthorBase
 
 public:
 	FHealthComponent HealthData;
-	
+
 	virtual void AddToEntity(EntityID entity, UECSManager* ecs) override;
 
-private:	
-	
+private:
+
 };

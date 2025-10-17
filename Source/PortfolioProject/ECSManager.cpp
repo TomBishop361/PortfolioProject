@@ -22,11 +22,12 @@ bool UECSManager::isEntityValid(EntityID entity) const
 
 template<typename T>
 void UECSManager::AddComponent(EntityID entity, const T& component) {
+	UE_LOG(LogTemp, Warning, TEXT("ComponentStorage is empty: %d"), ComponentStorage.IsEmpty() ? 1 : 0);
 	if (!isEntityValid(entity)) {
-		return nullptr;
+		return;
 	}
 
-	FName TypeName = FName(typeid(T).name);
+	FName TypeName = FName(typeid(T).name());
 
 	TSharedPtr<TMap<EntityID, T>> TypedStorage;
 
@@ -41,7 +42,7 @@ void UECSManager::AddComponent(EntityID entity, const T& component) {
 	}
 	//Dereference shared pointer to access map object
 	(*TypedStorage).Add(entity, component);
-
+	UE_LOG(LogTemp, Warning, TEXT("ComponentStorage is empty: %d"), ComponentStorage.IsEmpty() ? 1 : 0);
 }
 
 template<typename T>
@@ -49,7 +50,7 @@ T* UECSManager::GetComponent(EntityID Entity) {
 	FName TypeName = FName(typeid(T).name());
 
 	if (!ComponentStorage.Contains(TypeName)) {
-		return nullptr;
+		return;
 	}
 
 	auto TypedStorage = StaticCastSharedPtr<TMap<EntityID, T>>(ComponentStorage[TypeName]);

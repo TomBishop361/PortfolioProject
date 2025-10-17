@@ -9,5 +9,5 @@
 void UhealthComponentAuthor::AddToEntity(EntityID entity, UECSManager* ecs)
 {
 	
-	ecs->AddComponent(entity, HealthData);
+	ecs->AddComponent<FHealthComponent>(entity, HealthData);
 }
