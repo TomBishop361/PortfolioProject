@@ -54,6 +54,7 @@ T* UECSManager::GetComponent(EntityID Entity) {
 	}
 
 	auto TypedStorage = StaticCastSharedPtr<TMap<EntityID, T>>(ComponentStorage[TypeName]);
-	return nullptr;
+	UE_LOG(LogTemp, Warning, TEXT("ComponentStorage is empty: %d"), TypedStorage);
+	return TypedStorage;
 
 }

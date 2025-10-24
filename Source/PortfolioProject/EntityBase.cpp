@@ -23,7 +23,6 @@ void AEntityBase::BeginPlay()
 
 			for (UcomponentAuthorBase* author : ecsComponents) {
 				if (author) {
-
 					author->AddToEntity(e, ECS);
 				}
 			}
