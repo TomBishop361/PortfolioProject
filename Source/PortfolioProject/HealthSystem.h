@@ -16,6 +16,6 @@ class PORTFOLIOPROJECT_API UHealthSystem : public UGameInstanceSubsystem
 public:
 	UECSManager* ECS;
 	
-	void AdjustHealth(EntityID e, int healthChange);
+	void AdjustHealth(EntityID e, UECSManager* ecs , int healthChange);
 
 };

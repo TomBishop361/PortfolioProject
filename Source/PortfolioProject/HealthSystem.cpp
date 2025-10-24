@@ -6,8 +6,7 @@
 
 
 
-void UHealthSystem::AdjustHealth(EntityID e, int healthChange)
+void UHealthSystem::AdjustHealth(EntityID e, UECSManager* ecs, int healthChange)
 {
-
 
 }
