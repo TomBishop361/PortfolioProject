@@ -14,8 +14,7 @@ AEntityBase::AEntityBase()
 
 // Called when the game starts or when spawned
 void AEntityBase::BeginPlay()
-{
-	
+{	
 	Super::BeginPlay();
 	if (UGameInstance* GameInstance = GetGameInstance()) {
 		if (UECSManager* ECS = GameInstance->GetSubsystem<UECSManager>()) {

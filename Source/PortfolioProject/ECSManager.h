@@ -14,6 +14,9 @@ class PORTFOLIOPROJECT_API UECSManager : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 public:
+
+	
+
 	EntityID CreateEntity();
 	void DestroyEntity(EntityID entity);
 	bool isEntityValid(EntityID entity) const;
@@ -24,12 +27,12 @@ public:
 	template<typename T>
 	T* GetComponent(EntityID entity);
 
-
+	TMap<FName, TSharedPtr<void>> ComponentStorage;
 
 private:
 	EntityID nextEntityID = 0;
 	TSet<EntityID> ActiveEntities;
 
-	TMap<FName, TSharedPtr<void>> ComponentStorage;
+	
 };
 

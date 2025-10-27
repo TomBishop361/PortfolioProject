@@ -3,6 +3,10 @@
 
 #include "ECSManager.h"
 
+
+
+
+
 EntityID UECSManager::CreateEntity() {
 	EntityID newID = nextEntityID++;
 	ActiveEntities.Add(newID);
