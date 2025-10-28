@@ -24,6 +24,24 @@ bool UECSManager::isEntityValid(EntityID entity) const
 }
 
 
+
+
+template<typename T>
+TMap<EntityID, T>* UECSManager::GetComponentMap()
+{
+	FName typeName = FName(typeid(T).name());
+
+	if (!ComponentStorage.Contains(typeName))
+	{
+		// Create a new map inside a shared pointer
+		ComponentStorage.Add(typeName, MakeShared<TMap<EntityID, T>>());
+	}
+
+	// Safe cast and return raw pointer to map
+	TSharedPtr<TMap<EntityID, T>> TypedStorage = StaticCastSharedPtr<TMap<EntityID, T>>(ComponentStorage[typeName]);
+	return TypedStorage.Get();
+}
+
 template<typename T>
 void UECSManager::AddComponent(EntityID entity, const T& component) {
 	
