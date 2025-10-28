@@ -26,13 +26,14 @@ bool UECSManager::isEntityValid(EntityID entity) const
 
 template<typename T>
 void UECSManager::AddComponent(EntityID entity, const T& component) {
-	UE_LOG(LogTemp, Warning, TEXT("ComponentStorage is empty: %d"), ComponentStorage.IsEmpty() ? 1 : 0);
+	
 	if (!isEntityValid(entity)) {
 		return;
 	}
 
 	FName TypeName = FName(typeid(T).name());
-
+	
+	UE_LOG(LogTemp, Warning, TEXT("Value %s"), *TypeName.ToString());
 	TSharedPtr<TMap<EntityID, T>> TypedStorage;
 
 	if (ComponentStorage.Contains(TypeName)) {
