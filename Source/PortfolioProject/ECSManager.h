@@ -22,9 +22,6 @@ public:
 	bool isEntityValid(EntityID entity) const;
 
 	template<typename T>
-	TMap<EntityID, T>* GetComponentMap();
-
-	template<typename T>
 	void AddComponent(EntityID entity, const T& component);
 
 	template<typename T>
