@@ -4,7 +4,7 @@
 #include "HealthSystem.h"
 
 
-
+bool isInitialised = false;
 
 void UHealthSystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -12,35 +12,63 @@ void UHealthSystem::Initialize(FSubsystemCollectionBase& Collection)
 	if (UGameInstance* GameInstance = GetGameInstance()) {
 		if (GameInstance->GetSubsystem<UECSManager>()) {
 			ECS = GameInstance->GetSubsystem<UECSManager>();
+			isInitialised = true;
 		}
 	}
 }
 
-void UHealthSystem::Tick(float DeltaTime)
-{
-	if (ECS->ComponentStorage.Contains("FDamageRequestComponent") && ECS->ComponentStorage.Contains("FHealthComponent")) {
-		TSharedPtr<TMap<EntityID, FDamageRequestComponent>> DamageRequestMap;
-		TSharedPtr<TMap<EntityID, FHealthComponent>> HealthCompMap;
+void UHealthSystem::Tick(float DeltaTime) {
+	if (!isInitialised || ECS == nullptr) {
+		UE_LOG(LogTemp, Warning, TEXT("ECS is null in UHealthSystem::Tick"));		
+		return;
+	}
+	static const FName DamageCompName("FDamageRequestComponent");
+	static const FName HealthCompName("FHealthComponent");
+	
 
-		DamageRequestMap = StaticCastSharedPtr<TMap<EntityID, FDamageRequestComponent>>(ECS->ComponentStorage[FName("FDamageRequestComponent")]);
-		HealthCompMap = StaticCastSharedPtr<TMap<EntityID, FHealthComponent>>(ECS->ComponentStorage[FName("FHealthComponent")]);
-		
-		for (auto& pair : *DamageRequestMap) {
-			EntityID Entity = pair.Key;
-			FDamageRequestComponent& DamageReqComp = pair.Value;
-
-			EntityID Target = DamageReqComp.TargetID;
-			int Damage = DamageReqComp.Damage;
-
-			if (!HealthCompMap->Contains(Target))
-				continue;
-
-			if (FHealthComponent* TargetHealth = HealthCompMap->Find(Target)) {
-				TargetHealth->CurrentHealth -= Damage;
-			}
-
+	if (auto DamageReqMap = ECS->GetComponentMap<FDamageRequestComponent>())
+	{
+		if (auto HealthMap = ECS->GetComponentMap<FHealthComponent>())
+		{
 		}
 	}
+	
+
+	//if (auto* DamageRequestMap = ECS->GetComponentMap<FDamageRequestComponent>()) {
+	//	if (auto* HealthCompMap = ECS->GetComponentMap<FHealthComponent>()) {
+
+	//		for (auto& pair : *DamageRequestMap) {
+	//			EntityID Entity = pair.Key;
+	//			FDamageRequestComponent& DamageReqComp = pair.Value;
+
+	//			EntityID Target = DamageReqComp.TargetID;
+	//			int Damage = DamageReqComp.Damage;
+
+
+
+
+
+	//			if (!HealthCompMap->Contains(Target)) {
+
+
+	//				continue;
+	//			}
+
+	//			if (FHealthComponent* TargetHealth = HealthCompMap->Find(Target)) {
+	//				TargetHealth->CurrentHealth -= Damage;
+	//				if (TargetHealth->CurrentHealth <= 0) {
+	//					//ToImplement
+	//					//ECS->AddComponent(Target, FDeathComponent{});
+	//				}
+
+	//			}
+
+
+
+	//		}
+
+	//	}
+	//}
 
 }
 

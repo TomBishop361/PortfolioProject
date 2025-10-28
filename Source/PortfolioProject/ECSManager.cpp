@@ -24,6 +24,23 @@ bool UECSManager::isEntityValid(EntityID entity) const
 }
 
 
+
+
+
+
+template<typename T>
+TSharedPtr<TMap<EntityID, T>> UECSManager::GetComponentMap()
+{
+	FName typeName = FName(typeid(T).name());
+
+	if (!ComponentStorage.Contains(typeName))
+	{
+		return nullptr; // no components of this type exist
+	} 
+
+	return StaticCastSharedPtr<TMap<EntityID, T>>(ComponentStorage[typeName]);
+}
+
 template<typename T>
 void UECSManager::AddComponent(EntityID entity, const T& component) {
 	
