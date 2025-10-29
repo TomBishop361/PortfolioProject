@@ -4,18 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "HealthSystem.h"
 #include "ECSManager.generated.h"
 /**
  * 
  */
 using EntityID = uint32;
+
 UCLASS()
 class PORTFOLIOPROJECT_API UECSManager : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 public:
-
+	TTuple<FHealthSystem> Systems;
 	
+	//virtual void Tick(float DeltaTime) override;
+	//virtual TStatId GetStatId() const override;
+	//virtual bool IsTickable() const override;
+
 
 	EntityID CreateEntity();
 	void DestroyEntity(EntityID entity);
@@ -32,10 +38,15 @@ public:
 
 	TMap<FName, TSharedPtr<void>> ComponentStorage;
 
+
+
+
 private:
 	EntityID nextEntityID = 0;
 	TSet<EntityID> ActiveEntities;
 
 	
+
+
 };
 
