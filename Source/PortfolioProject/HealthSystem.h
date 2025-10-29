@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DamageRequestComponent.h"
+#include "HealthComponent.h"
 #include "HealthSystem.generated.h"
 
 /**

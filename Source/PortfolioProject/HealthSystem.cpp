@@ -4,9 +4,13 @@
 #include "HealthSystem.h"
 #include "ECSManager.h"
 
-void adjustHealth(UECSManager* ECS) {
-	if (auto DamageRequestMap = ECS->GetComponentMap<FDamageRequestComponent>()) {
-	
-	}
 
+
+void FHealthSystem::adjustHealth(UECSManager* ECS)
+{
+	if (auto DamageRequestMap = ECS->GetComponentMap<FDamageRequestComponent>()) {
+		if (auto healthMap = ECS->GetComponentMap<FHealthComponent>()) {
+
+		}
+	}
 }
