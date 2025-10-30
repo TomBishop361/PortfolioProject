@@ -25,9 +25,9 @@ bool UECSManager::isEntityValid(EntityID entity) const
 	return ActiveEntities.Contains(entity);
 }
 
-
-
-
+void UECSManager::Tick() {
+	UE_LOG(LogTemp, Warning, TEXT("Tick"));
+}
 
 
 template<typename T>

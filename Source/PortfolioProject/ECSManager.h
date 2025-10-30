@@ -22,6 +22,7 @@ public:
 	//virtual TStatId GetStatId() const override;
 	//virtual bool IsTickable() const override;
 
+	void Tick();
 
 	EntityID CreateEntity();
 	void DestroyEntity(EntityID entity);
