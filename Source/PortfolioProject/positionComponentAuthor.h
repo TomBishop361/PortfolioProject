@@ -6,12 +6,12 @@
 #include "componentAuthorBase.h"
 #include "positionComponentAuthor.generated.h"
 /**
- * 
+ *
  */
 UCLASS(Blueprintable)
-class PORTFOLIOPROJECT_API UpositionComponentAuthor : public UcomponentAuthorBase
+class PORTFOLIOPROJECT_API UPositionComponentAuthor : public UcomponentAuthorBase
 {
 	GENERATED_BODY()
 public:
-	
+	virtual void AddToEntity(EntityID entity, UECSManager* ecs) override;
 };
