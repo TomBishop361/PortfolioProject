@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PositionComponent.h"
 #include "componentAuthorBase.h"
 #include "positionComponentAuthor.generated.h"
 /**
@@ -13,5 +14,8 @@ class PORTFOLIOPROJECT_API UPositionComponentAuthor : public UcomponentAuthorBas
 {
 	GENERATED_BODY()
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FPositionComponent positionData;
+
 	virtual void AddToEntity(EntityID entity, UECSManager* ecs) override;
 };

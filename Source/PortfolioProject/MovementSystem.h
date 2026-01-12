@@ -3,17 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DamageRequestComponent.h"
-#include "HealthComponent.h"
-#include "HealthSystem.generated.h"
-
+#include "PositionComponent.h"
+#include "TransformLinkComponent.h"
+#include "MovementSystem.generated.h"
 /**
  * 
  */
-
 class UECSManager;
 USTRUCT()
-struct PORTFOLIOPROJECT_API FHealthSystem
+struct PORTFOLIOPROJECT_API FMovementSystem
 {
 	GENERATED_BODY()
 public:

@@ -6,7 +6,7 @@
 
 
 
-void FHealthSystem::adjustHealth(UECSManager* ECS)
+void FHealthSystem::Perform(UECSManager* ECS)
 {
 	if (auto DamageRequestMap = ECS->GetComponentMap<FDamageRequestComponent>()) {
 		if (auto healthMap = ECS->GetComponentMap<FHealthComponent>()) {

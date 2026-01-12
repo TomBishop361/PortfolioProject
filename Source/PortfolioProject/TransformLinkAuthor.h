@@ -3,24 +3,23 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "HealthComponent.h"
+#include "TransformLinkComponent.h"
 #include "componentAuthorBase.h"
-#include "healthComponentAuthor.generated.h"
+#include "transformLinkAuthor.generated.h"
 
 /**
  * 
  */
 UCLASS(Blueprintable, EditInlineNew)
-class PORTFOLIOPROJECT_API UhealthComponentAuthor : public UcomponentAuthorBase
+class PORTFOLIOPROJECT_API UTransformLinkAuthor : public UcomponentAuthorBase
 {
 	GENERATED_BODY()
-
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FHealthComponent HealthData;
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FTransformLinkComponent transformLink;*/
+	FTransformLinkComponent Link;
 
+	
 	virtual void AddToEntity(EntityID entity, UECSManager* ecs) override;
-
-private:
-
+	
 };

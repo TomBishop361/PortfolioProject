@@ -6,5 +6,5 @@
 void UPositionComponentAuthor::AddToEntity(EntityID entity, UECSManager* ecs)
 {
 
-	//ecs->AddComponent<FHealthComponent>(entity, HealthData);
+	ecs->AddComponent<FPositionComponent>(entity, positionData );
 }
