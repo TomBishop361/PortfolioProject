@@ -11,6 +11,6 @@ void UTransformLinkAuthor::AddToEntity(EntityID entity, UECSManager* ecs)
 	{
 		Link.LinkedActor = ownerActor;
 	}
-
+	
 	ecs->AddComponent<FTransformLinkComponent>(entity, Link);
 }

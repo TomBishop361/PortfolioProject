@@ -8,8 +8,6 @@
 #include "componentAuthorBase.h"
 #include "EntityBase.generated.h"
 
-
-
 UCLASS()
 class PORTFOLIOPROJECT_API AEntityBase : public AActor
 {
@@ -25,10 +23,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	
-	
-
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

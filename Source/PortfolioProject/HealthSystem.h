@@ -3,19 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SystemInterface.h"
 #include "DamageRequestComponent.h"
 #include "HealthComponent.h"
-#include "HealthSystem.generated.h"
 
-/**
- * 
- */
-
-class UECSManager;
-USTRUCT()
-struct PORTFOLIOPROJECT_API FHealthSystem
+struct PORTFOLIOPROJECT_API FHealthSystem : public ISystemInterface
 {
-	GENERATED_BODY()
+	//GENERATED_BODY()
 public:
-	void Perform(UECSManager* ECS);
+	void Perform(UECSManager* ECS) override;
 };

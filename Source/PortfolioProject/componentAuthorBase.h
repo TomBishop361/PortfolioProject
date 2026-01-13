@@ -15,5 +15,5 @@ class PORTFOLIOPROJECT_API UcomponentAuthorBase : public UObject
 	GENERATED_BODY()
 public:
 	
-	virtual void AddToEntity(EntityID entity, UECSManager* ecs);
+	virtual void AddToEntity(EntityID entity, UECSManager* ecs) PURE_VIRTUAL(UcomponentAuthorBase::AddToEntity, );
 };

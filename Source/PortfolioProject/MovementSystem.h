@@ -3,17 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SystemInterface.h"
 #include "PositionComponent.h"
 #include "TransformLinkComponent.h"
-#include "MovementSystem.generated.h"
-/**
- * 
- */
-class UECSManager;
-USTRUCT()
-struct PORTFOLIOPROJECT_API FMovementSystem
+
+
+struct PORTFOLIOPROJECT_API FMovementSystem : public ISystemInterface
 {
-	GENERATED_BODY()
+	
 public:
-	void Perform(UECSManager* ECS);
+	void Perform(UECSManager* ECS) override;
 };

@@ -20,9 +20,10 @@ void AEntityBase::BeginPlay()
 		if (UECSManager* ECS = GameInstance->GetSubsystem<UECSManager>()) {
 			e = ECS->CreateEntity();
 
-			for (UcomponentAuthorBase* author : ecsComponents) {
+			for (auto* author : ecsComponents) {
 				if (author) {
 					author->AddToEntity(e, ECS);
+					UE_LOG(LogTemp, Warning, TEXT("Called AddToEntity"));
 				}
 			}
 		}

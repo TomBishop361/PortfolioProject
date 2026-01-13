@@ -3,30 +3,31 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SystemInterface.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "HealthSystem.h"
+#include "MovementSystem.h"
 #include "ECSManager.generated.h"
-/**
- * 
- */
-using EntityID = uint32;
 
+
+using EntityID = uint32;
 UCLASS()
 class PORTFOLIOPROJECT_API UECSManager : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 public:
-	TTuple<FHealthSystem> Systems;
 	
-	//virtual void Tick(float DeltaTime) override;
-	//virtual TStatId GetStatId() const override;
-	//virtual bool IsTickable() const override;
+	TArray<TUniquePtr<ISystemInterface>> Systems;
+	TUniquePtr<FHealthSystem> healthSyst = MakeUnique<FHealthSystem>();
+	TUniquePtr<FMovementSystem> moveSyst = MakeUnique<FMovementSystem>();
 
 	void Tick();
 
 	EntityID CreateEntity();
 	void DestroyEntity(EntityID entity);
-	bool isEntityValid(EntityID entity) const;	
+	bool isEntityValid(EntityID entity) const;
+
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
 	template<typename T>
 	TSharedPtr<TMap<EntityID, T>> GetComponentMap()

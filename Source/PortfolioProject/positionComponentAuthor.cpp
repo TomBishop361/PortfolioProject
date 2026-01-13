@@ -5,6 +5,7 @@
 
 void UPositionComponentAuthor::AddToEntity(EntityID entity, UECSManager* ecs)
 {
-
+	
 	ecs->AddComponent<FPositionComponent>(entity, positionData );
+	
 }
