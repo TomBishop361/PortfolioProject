@@ -14,6 +14,9 @@ class PORTFOLIOPROJECT_API AEntityBase : public AActor
 	GENERATED_BODY()
 	
 public:	
+
+
+
 	UPROPERTY(EditAnywhere, Instanced, Category = "ECS")
 	TArray<UcomponentAuthorBase*> ecsComponents;
 	EntityID e;

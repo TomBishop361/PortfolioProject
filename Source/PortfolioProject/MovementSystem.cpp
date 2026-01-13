@@ -15,12 +15,18 @@ void FMovementSystem::Perform(UECSManager* ECS) {
 					continue;
 				}
 
-				Position.x += 0.1f;
-				Position.y += 0.1f;
-				Position.z += 0.1f;
+				FVector playerPos = transformLink->LinkedActor->GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
 
-				FVector NewLocation(Position.x, Position.y, Position.z);
-				transformLink->LinkedActor->SetActorLocation(NewLocation);
+				FVector Delta(0.5f,0.0f,0.0f);				
+
+				FHitResult Hit;
+				
+				transformLink->LinkedActor->AddActorWorldOffset(Delta,true,&Hit);
+
+				FVector ActualLocation = transformLink->LinkedActor->GetActorLocation();
+				Position.x = ActualLocation.X;
+				Position.y = ActualLocation.Y;
+				Position.z = ActualLocation.Z;
 			}
 		}
 	}

@@ -3,14 +3,27 @@
 
 #include "EntityBase.h"
 #include "Engine/GameInstance.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AEntityBase::AEntityBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	//PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
+	UCapsuleComponent* Capsule =
+		CreateDefaultSubobject<UCapsuleComponent>(TEXT("RootCapsule"));
+
+	RootComponent = Capsule;
+
+	Capsule->InitCapsuleSize(34.f, 88.f);
+	Capsule->SetCollisionProfileName(TEXT("BlockAll"));
+	Capsule->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	Capsule->SetSimulatePhysics(false);
+	
 }
+
 
 // Called when the game starts or when spawned
 void AEntityBase::BeginPlay()
