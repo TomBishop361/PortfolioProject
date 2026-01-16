@@ -13,7 +13,7 @@ struct PORTFOLIOPROJECT_API FDamageRequestComponent
 {
 	GENERATED_BODY()
 public:
-	EntityID AttackerID;
+	//EntityID AttackerID;
 	EntityID TargetID;
 	int Damage;
 };

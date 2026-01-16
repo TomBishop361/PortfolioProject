@@ -36,8 +36,7 @@ void AEntityBase::BeginPlay()
 
 			for (auto* author : ecsComponents) {
 				if (author) {
-					author->AddToEntity(e, ECS);
-					UE_LOG(LogTemp, Warning, TEXT("Called AddToEntity"));
+					author->AddToEntity(e, ECS);					
 				}
 			}
 		}

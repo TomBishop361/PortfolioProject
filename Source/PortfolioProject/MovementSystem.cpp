@@ -10,7 +10,7 @@ void FMovementSystem::Perform(UECSManager* ECS) {
 			for (auto& [targetID, Position] : *positionCompMap) {
 				FTransformLinkComponent* transformLink = transformMap->Find(targetID);
 
-				if (!transformLink || !transformLink->LinkedActor)
+				if (!transformLink || !transformLink->LinkedActor || !transformLink->LinkedActor->IsA(AActor::StaticClass()))
 				{
 					continue;
 				}

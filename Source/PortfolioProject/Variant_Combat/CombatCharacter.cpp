@@ -51,8 +51,7 @@ ACombatCharacter::ACombatCharacter()
 
 	// set the player tag
 	Tags.Add(FName("Player"));
-	GameInstance = GetGameInstance();
-	ECS = GameInstance->GetSubsystem<UECSManager>();
+	
 }
 
 void ACombatCharacter::Move(const FInputActionValue& Value)
@@ -278,7 +277,10 @@ void ACombatCharacter::DoAttackTrace(FName DamageSourceBone)
 			if (Damageable)
 			{
 
+				DamageRequest.TargetID = Damageable->e;
+				DamageRequest.Damage = 15;
 				
+				ECS->AddComponent<FDamageRequestComponent>(Damageable->e, DamageRequest);
 
 				//// knock upwards and away from the impact normal
 				//const FVector Impulse = (CurrentHit.ImpactNormal * -MeleeKnockbackImpulse) + (FVector::UpVector * MeleeLaunchImpulse);
@@ -448,6 +450,9 @@ void ACombatCharacter::BeginPlay()
 
 	// reset HP to maximum
 	ResetHP();
+	GameInstance = GetGameInstance();
+	ECS = GameInstance->GetSubsystem<UECSManager>();
+
 }
 
 void ACombatCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)

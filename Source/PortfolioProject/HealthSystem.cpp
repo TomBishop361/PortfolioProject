@@ -8,6 +8,7 @@
 
 void FHealthSystem::Perform(UECSManager* ECS)
 {
+	UE_LOG(LogTemp, Warning, TEXT("HealthSystem"));
 	if (auto DamageRequestMap = ECS->GetComponentMap<FDamageRequestComponent>()) {
 		if (auto healthMap = ECS->GetComponentMap<FHealthComponent>()) {
 			for (auto [targetID , Request] : *DamageRequestMap) {
@@ -15,6 +16,7 @@ void FHealthSystem::Perform(UECSManager* ECS)
 				
 				targetHealthComp->CurrentHealth += Request.Damage;
 				
+				UE_LOG(LogTemp, Warning, TEXT("Applied Damage"));
 				if (targetHealthComp->CurrentHealth <= 0) {
 					//ECS->AddComponent(targetID,FDeathComponent);
 

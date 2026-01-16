@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "SystemInterface.h"
+#include "ECSWorld.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "HealthSystem.h"
 #include "MovementSystem.h"
@@ -16,10 +17,7 @@ class PORTFOLIOPROJECT_API UECSManager : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 public:
-	
-	TArray<TUniquePtr<ISystemInterface>> Systems;
-	TUniquePtr<FHealthSystem> healthSyst = MakeUnique<FHealthSystem>();
-	TUniquePtr<FMovementSystem> moveSyst = MakeUnique<FMovementSystem>();
+	ECSWorld ECSWorld;
 
 	void Tick();
 
@@ -29,8 +27,11 @@ public:
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
+	
+	
+
 	template<typename T>
-	TSharedPtr<TMap<EntityID, T>> GetComponentMap()
+	TMap<EntityID, T>* GetComponentMap()
 	{
 		FName typeName = FName(typeid(T).name());
 
@@ -39,50 +40,48 @@ public:
 			return nullptr; // no components of this type exist
 		}
 
-		return StaticCastSharedPtr<TMap<EntityID, T>>(ComponentStorage[typeName]);
+		auto TypedStorage = StaticCastSharedPtr<TComponentStorage<T>>(ComponentStorage[typeName]);
+		return &TypedStorage->Data;
 	}
 
 	template<typename T>
 	void AddComponent(EntityID entity, const T& component) {
 
-		if (!isEntityValid(entity)) {
-			return;
-		}
 
 		FName TypeName = FName(typeid(T).name());
 
 		UE_LOG(LogTemp, Warning, TEXT("Value %s"), *TypeName.ToString());
-		TSharedPtr<TMap<EntityID, T>> TypedStorage;
+		TSharedPtr<TComponentStorage<T>> TypedStorage;
 
 		if (ComponentStorage.Contains(TypeName)) {
 			//TypedStorage = already existing sharedpointer
-			TypedStorage = StaticCastSharedPtr<TMap<EntityID, T>>(ComponentStorage[TypeName]);
+			TypedStorage = StaticCastSharedPtr<TComponentStorage<T>>(ComponentStorage[TypeName]);
 		}
 		else {
 			//Create new shared pointer and Add to ComponentStorage
-			TypedStorage = MakeShared<TMap<EntityID, T>>();
+			TypedStorage = MakeShared<TComponentStorage<T>>();
 			ComponentStorage.Add(TypeName, TypedStorage);
 		}
 		//Dereference shared pointer to access map object
-		(*TypedStorage).Add(entity, component);
+		TypedStorage->Data.Add(entity, component);
+
 		UE_LOG(LogTemp, Warning, TEXT("ComponentStorage is empty: %d"), ComponentStorage.IsEmpty() ? 1 : 0);
 	}
 
+	
+
+	struct IComponentStorage
+	{
+		virtual ~IComponentStorage() = default;
+	};
+
 	template<typename T>
-	T* GetComponent(EntityID Entity) {
-		FName TypeName = FName(typeid(T).name());
+	struct TComponentStorage : IComponentStorage
+	{
+		TMap<EntityID, T> Data;
+	};
 
-		if (!ComponentStorage.Contains(TypeName)) {
-			return;
-		}
-
-		auto TypedStorage = StaticCastSharedPtr<TMap<EntityID, T>>(ComponentStorage[TypeName]);
-		UE_LOG(LogTemp, Warning, TEXT("ComponentStorage is empty: %d"), TypedStorage);
-		return TypedStorage;
-
-	}
-
-	TMap<FName, TSharedPtr<void>> ComponentStorage;
+	TMap<FName, TSharedPtr<IComponentStorage>> ComponentStorage;
 
 private:
 	EntityID nextEntityID = 0;

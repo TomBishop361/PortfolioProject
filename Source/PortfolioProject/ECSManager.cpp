@@ -21,11 +21,12 @@ bool UECSManager::isEntityValid(EntityID entity) const
 
 void UECSManager::Initialize(FSubsystemCollectionBase& Collection)
 {
-	Systems.Add(MakeUnique<FMovementSystem>());
+	ECSWorld.Systems.Add(MakeUnique<FHealthSystem>());
+	ECSWorld.Systems.Add(MakeUnique<FMovementSystem>());
 }
 
 void UECSManager::Tick() {
-	for (const TUniquePtr<ISystemInterface>& System : Systems)
+	for (const TUniquePtr<ISystemInterface>& System : ECSWorld.Systems)
 	{
 		if (System) // safety check
 		{
