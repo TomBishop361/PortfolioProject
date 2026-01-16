@@ -16,10 +16,16 @@ void FMovementSystem::Perform(UECSManager* ECS) {
 				}
 
 				FVector playerPos = transformLink->LinkedActor->GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+				//Entity (Position - TargetPosition).Normalised
+				// Delta normalised vector ^
+				FVector CurrentPos (Position.x, Position.y, Position.z);
+				
+				
+				
 
-				FVector Delta(0.5f,0.0f,0.0f);				
+				FVector Delta ((playerPos- CurrentPos).GetSafeNormal());
 
-				FHitResult Hit;
+				FHitResult Hit;				
 				
 				transformLink->LinkedActor->AddActorWorldOffset(Delta,true,&Hit);
 

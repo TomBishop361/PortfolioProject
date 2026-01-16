@@ -19,7 +19,8 @@ AEntityBase::AEntityBase()
 
 	Capsule->InitCapsuleSize(34.f, 88.f);
 	Capsule->SetCollisionProfileName(TEXT("BlockAll"));
-	Capsule->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	Capsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
 	Capsule->SetSimulatePhysics(false);
 	
 }

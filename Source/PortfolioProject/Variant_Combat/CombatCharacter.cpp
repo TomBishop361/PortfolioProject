@@ -51,6 +51,8 @@ ACombatCharacter::ACombatCharacter()
 
 	// set the player tag
 	Tags.Add(FName("Player"));
+	GameInstance = GetGameInstance();
+	ECS = GameInstance->GetSubsystem<UECSManager>();
 }
 
 void ACombatCharacter::Move(const FInputActionValue& Value)
@@ -270,18 +272,22 @@ void ACombatCharacter::DoAttackTrace(FName DamageSourceBone)
 		for (const FHitResult& CurrentHit : OutHits)
 		{
 			// check if we've hit a damageable actor
-			ICombatDamageable* Damageable = Cast<ICombatDamageable>(CurrentHit.GetActor());
+			//ICombatDamageable* Damageable = Cast<ICombatDamageable>(CurrentHit.GetActor());
+			AEntityBase* Damageable = Cast<AEntityBase>(CurrentHit.GetActor());
 
 			if (Damageable)
 			{
-				// knock upwards and away from the impact normal
-				const FVector Impulse = (CurrentHit.ImpactNormal * -MeleeKnockbackImpulse) + (FVector::UpVector * MeleeLaunchImpulse);
 
-				// pass the damage event to the actor
-				Damageable->ApplyDamage(MeleeDamage, this, CurrentHit.ImpactPoint, Impulse);
+				
 
-				// call the BP handler to play effects, etc.
-				DealtDamage(MeleeDamage, CurrentHit.ImpactPoint);
+				//// knock upwards and away from the impact normal
+				//const FVector Impulse = (CurrentHit.ImpactNormal * -MeleeKnockbackImpulse) + (FVector::UpVector * MeleeLaunchImpulse);
+
+				//// pass the damage event to the actor
+				//Damageable->ApplyDamage(MeleeDamage, this, CurrentHit.ImpactPoint, Impulse);
+
+				//// call the BP handler to play effects, etc.
+				//DealtDamage(MeleeDamage, CurrentHit.ImpactPoint);
 			}
 		}
 	}

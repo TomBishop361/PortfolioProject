@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "CombatAttacker.h"
+#include "EntityBase.h"
 #include "CombatDamageable.h"
 #include "Animation/AnimInstance.h"
 #include "CombatCharacter.generated.h"
@@ -15,7 +16,8 @@ class UInputAction;
 struct FInputActionValue;
 class UCombatLifeBar;
 class UWidgetComponent;
-
+//idk
+class ECSManager;
 DECLARE_LOG_CATEGORY_EXTERN(LogCombatCharacter, Log, All);
 
 /**
@@ -177,6 +179,11 @@ public:
 	
 	/** Constructor */
 	ACombatCharacter();
+
+	//ECS
+	UGameInstance* GameInstance;
+	UECSManager* ECS;
+	FDamageRequestComponent DamageRequest;
 
 protected:
 
