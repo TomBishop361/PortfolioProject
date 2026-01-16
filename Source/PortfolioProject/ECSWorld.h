@@ -9,8 +9,4 @@
  */
 
 //Prevents Unreal GC
-struct PORTFOLIOPROJECT_API ECSWorld
-{
-	TArray<TUniquePtr<ISystemInterface>> Systems;
-	
-};
+

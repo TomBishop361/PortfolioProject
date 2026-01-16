@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "SystemInterface.h"
-#include "ECSWorld.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "HealthSystem.h"
 #include "MovementSystem.h"
@@ -17,6 +16,11 @@ class PORTFOLIOPROJECT_API UECSManager : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 public:
+	struct ECSWorld
+	{
+		TArray<TUniquePtr<ISystemInterface>> Systems;
+
+	};
 	ECSWorld ECSWorld;
 
 	void Tick();
