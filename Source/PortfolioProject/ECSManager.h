@@ -16,6 +16,7 @@ class PORTFOLIOPROJECT_API UECSManager : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 public:
+	//Wrapped to keep outside the GC’s reach.
 	struct ECSWorld
 	{
 		TArray<TUniquePtr<ISystemInterface>> Systems;
@@ -30,10 +31,7 @@ public:
 	bool isEntityValid(EntityID entity) const;
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
-
 	
-	
-
 	template<typename T>
 	TMap<EntityID, T>* GetComponentMap()
 	{
@@ -71,20 +69,33 @@ public:
 
 		UE_LOG(LogTemp, Warning, TEXT("ComponentStorage is empty: %d"), ComponentStorage.IsEmpty() ? 1 : 0);
 	}
-
 	
+	template<typename T>
+	void RemoveComponent(EntityID entity) {
+		FName typeName = FName(typeid(T).name());
+		if (!ComponentStorage.Contains(typeName)) {
+			//UE_LOG(LogTemp, Warning, TEXT("Removed"));
+			return;
+		}
+
+		auto TypedStorage = StaticCastSharedPtr<TComponentStorage<T>>(ComponentStorage[typeName]);
+		TypedStorage->Data.Remove(entity);
+
+		if (TypedStorage->Data.Num() == 0)
+		{
+			ComponentStorage.Remove(typeName);
+		}
+	}
 
 	struct IComponentStorage
 	{
 		virtual ~IComponentStorage() = default;
 	};
-
 	template<typename T>
 	struct TComponentStorage : IComponentStorage
 	{
 		TMap<EntityID, T> Data;
 	};
-
 	TMap<FName, TSharedPtr<IComponentStorage>> ComponentStorage;
 
 private:
