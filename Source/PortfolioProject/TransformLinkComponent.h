@@ -13,9 +13,6 @@ struct PORTFOLIOPROJECT_API FTransformLinkComponent
 {
 	GENERATED_BODY()
 	
-public:
-	
-
-	UPROPERTY()
+public:	
 	AActor* LinkedActor = nullptr;
 };

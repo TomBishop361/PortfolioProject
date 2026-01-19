@@ -23,6 +23,8 @@ public:
 
 	};
 	ECSWorld ECSWorld;
+	TArray<EntityID> entityPendingDestruction;
+	TArray<AActor*> pendingActorDestroys;
 
 	void Tick();
 
@@ -30,6 +32,8 @@ public:
 	void DestroyEntity(EntityID entity);
 	bool isEntityValid(EntityID entity) const;
 	void removeAllComponentsFromEntity(EntityID entity);
+	void processDestrctionRequests();
+	
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	

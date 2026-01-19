@@ -15,14 +15,19 @@ void FMovementSystem::Perform(UECSManager* ECS) {
 					continue;
 				}
 
-				FVector playerPos = transformLink->LinkedActor->GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
-				//Entity (Position - TargetPosition).Normalised
-				// Delta normalised vector ^
+				
+				UWorld* World = transformLink->LinkedActor->GetWorld();
+				if (!World)	continue;				
+				APlayerController* PC = World->GetFirstPlayerController();
+				if (!PC) continue;				
+				APawn* Pawn = PC->GetPawn();
+				if (!Pawn) continue;
+				FVector playerPos = Pawn->GetActorLocation();
+				
+				
 				FVector CurrentPos (Position.x, Position.y, Position.z);
 				
-				
-				
-
+			
 				FVector Delta ((playerPos- CurrentPos).GetSafeNormal());
 
 				FHitResult Hit;				

@@ -278,7 +278,7 @@ void ACombatCharacter::DoAttackTrace(FName DamageSourceBone)
 			{
 
 				DamageRequest.TargetID = Damageable->e;
-				DamageRequest.Damage = 15;
+				DamageRequest.Damage = -15;
 				
 				ECS->AddComponent<FDamageRequestComponent>(Damageable->e, DamageRequest);
 
