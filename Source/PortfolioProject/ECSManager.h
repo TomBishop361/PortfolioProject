@@ -25,14 +25,14 @@ public:
 	ECSWorld ECSWorld;
 	TArray<EntityID> entityPendingDestruction;
 	TArray<AActor*> pendingActorDestroys;
-
+	int activeEntityCount = 0;
 	void Tick();
 
 	EntityID CreateEntity();
 	void DestroyEntity(EntityID entity);
 	bool isEntityValid(EntityID entity) const;
 	void removeAllComponentsFromEntity(EntityID entity);
-	void processDestrctionRequests();
+	void processDestructionRequests();
 	
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;

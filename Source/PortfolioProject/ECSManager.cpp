@@ -5,6 +5,7 @@
 
 EntityID UECSManager::CreateEntity() {
 	EntityID newID = nextEntityID++;
+    activeEntityCount++;
 	ActiveEntities.Add(newID);
 	return newID;
 }
@@ -12,6 +13,7 @@ EntityID UECSManager::CreateEntity() {
 void UECSManager::DestroyEntity(EntityID entity)
 {
 	ActiveEntities.Remove(entity);
+    activeEntityCount--;
 }
 
 bool UECSManager::isEntityValid(EntityID entity) const
@@ -36,7 +38,7 @@ void UECSManager::removeAllComponentsFromEntity(EntityID entity)
 	}
 }
 
-void UECSManager::processDestrctionRequests()
+void UECSManager::processDestructionRequests()
 {
     // Check to see if TransfromLinkComp has Map
     if (auto transformMap = GetComponentMap<FTransformLinkComponent>()) {
@@ -92,5 +94,5 @@ void UECSManager::Tick() {
 			System->Perform(this);
 		}		
 	}	
-	processDestrctionRequests();
+    processDestructionRequests();
 }

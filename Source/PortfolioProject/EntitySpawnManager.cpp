@@ -3,25 +3,51 @@
 
 #include "EntitySpawnManager.h"
 
-// Sets default values
-AEntitySpawnManager::AEntitySpawnManager()
-{
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 
+AEntitySpawnManager::AEntitySpawnManager() {    
+    PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.bStartWithTickEnabled = true;
+}
+
+void AEntitySpawnManager::SpawnECSActor()
+{
+    RandomNumber = FMath::RandRange(0, spawnPositions.Num() - 1);
+    
+    if (!BlueprintActorClassEntity) return;
+    FActorSpawnParameters SpawnParams;
+    SpawnParams.Owner = this;
+    SpawnParams.SpawnCollisionHandlingOverride =
+        ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+    GetWorld()->SpawnActor<AActor>(
+        BlueprintActorClassEntity ,
+        spawnPositions[RandomNumber],
+        FRotator::ZeroRotator,
+        SpawnParams
+        
+    );
+    UE_LOG(LogTemp, Warning, TEXT("EntitySpawned"));
 }
 
 // Called when the game starts or when spawned
 void AEntitySpawnManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+    if (UGameInstance* GameInstance = GetGameInstance()) {        
+        ECS = GameInstance->GetSubsystem<UECSManager>();        
+    }
+    SpawnECSActor();
 }
 
 // Called every frame
 void AEntitySpawnManager::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-
+	Super::Tick(DeltaTime);    
+    if (ECS) {
+        if (ECS->activeEntityCount < SpawnAmount) {
+            UE_LOG(LogTemp, Warning, TEXT("Gettin' ECS"));
+            SpawnECSActor();
+        }
+    }
 }
 
