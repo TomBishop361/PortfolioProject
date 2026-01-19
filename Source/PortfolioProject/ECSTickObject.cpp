@@ -26,7 +26,7 @@ void AECSTickObject::BeginPlay()
 void AECSTickObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	ECS->Tick();
+	if(ECS) ECS->Tick();
 
 }
 

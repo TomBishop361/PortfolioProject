@@ -29,6 +29,7 @@ public:
 	EntityID CreateEntity();
 	void DestroyEntity(EntityID entity);
 	bool isEntityValid(EntityID entity) const;
+	void removeAllComponentsFromEntity(EntityID entity);
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	
@@ -73,11 +74,9 @@ public:
 	template<typename T>
 	void RemoveComponent(EntityID entity) {
 		FName typeName = FName(typeid(T).name());
-		if (!ComponentStorage.Contains(typeName)) {
-			//UE_LOG(LogTemp, Warning, TEXT("Removed"));
+		if (!ComponentStorage.Contains(typeName)) {			
 			return;
 		}
-
 		auto TypedStorage = StaticCastSharedPtr<TComponentStorage<T>>(ComponentStorage[typeName]);
 		TypedStorage->Data.Remove(entity);
 
@@ -90,11 +89,22 @@ public:
 	struct IComponentStorage
 	{
 		virtual ~IComponentStorage() = default;
+		//Pure Virtual
+		virtual void RemoveEntity(EntityID Entity) = 0;
+		virtual bool IsEmpty() const = 0;
 	};
 	template<typename T>
 	struct TComponentStorage : IComponentStorage
 	{
 		TMap<EntityID, T> Data;
+		virtual void RemoveEntity(EntityID Entity) override
+		{
+			Data.Remove(Entity);
+		}
+		virtual bool IsEmpty() const override
+		{
+			return Data.Num() == 0;
+		}
 	};
 	TMap<FName, TSharedPtr<IComponentStorage>> ComponentStorage;
 

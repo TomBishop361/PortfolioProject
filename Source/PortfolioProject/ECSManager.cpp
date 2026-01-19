@@ -19,19 +19,35 @@ bool UECSManager::isEntityValid(EntityID entity) const
 	return ActiveEntities.Contains(entity);
 }
 
+void UECSManager::removeAllComponentsFromEntity(EntityID entity)
+{
+	TArray<FName> ToRemove;
+
+	for (auto It = ComponentStorage.CreateConstIterator(); It; ++It) {
+		It.Value()->RemoveEntity(entity);
+
+		if (It.Value()->IsEmpty()) {
+			ToRemove.Add(It.Key());
+		}
+	}
+	for (const FName& Key : ToRemove)
+	{
+		ComponentStorage.Remove(Key);
+	}
+}
+
 void UECSManager::Initialize(FSubsystemCollectionBase& Collection)
 {
 	ECSWorld.Systems.Add(MakeUnique<FHealthSystem>());
 	ECSWorld.Systems.Add(MakeUnique<FMovementSystem>());
 }
 
-void UECSManager::Tick() {
+void UECSManager::Tick() {	
 	for (const TUniquePtr<ISystemInterface>& System : ECSWorld.Systems)
 	{
 		if (System) // safety check
 		{
 			System->Perform(this);
-		}
-	}
-	
+		}		
+	}	
 }

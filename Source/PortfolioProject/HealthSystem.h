@@ -15,4 +15,5 @@ public:
 
 private:
 	TArray<EntityID> ToRemove;
+	TArray<EntityID> ToDestroy;
 };

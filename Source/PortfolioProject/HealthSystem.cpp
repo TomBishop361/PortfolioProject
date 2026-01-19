@@ -15,16 +15,22 @@ void FHealthSystem::Perform(UECSManager* ECS)
 				{					
 					UE_LOG(LogTemp, Warning, TEXT("DamageRequestSeen"));
 					targetHealthComp->CurrentHealth += Request.Damage;
+					targetHealthComp->CurrentHealth = FMath::Clamp(targetHealthComp->CurrentHealth, 0, targetHealthComp->MaxHealth);
+					//Marks Damage Component for removal
 					ToRemove.Add(targetID);
-
 					if (targetHealthComp->CurrentHealth <= 0) {
-						//ECS->AddComponent(targetID,FDeathComponent);
-
-
+						ToDestroy.Add(targetID);
 					}
 				}
 			}
 		}
 	}
-	for(EntityID ID : ToRemove) ECS->RemoveComponent<FDamageRequestComponent>(ID);
+	for (EntityID ID : ToRemove) {
+		ECS->RemoveComponent<FDamageRequestComponent>(ID);
+	}
+	for (EntityID ID : ToDestory) {
+
+	}
+	ToRemove.Empty();
+	ToDestroy.Empty();
 }
