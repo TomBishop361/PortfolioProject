@@ -9,7 +9,7 @@
 
 struct PORTFOLIOPROJECT_API FHealthSystem : public ISystemInterface
 {
-	//GENERATED_BODY()
+	
 public:
 	void Perform(UECSManager* ECS) override;
 

@@ -16,12 +16,14 @@ class PORTFOLIOPROJECT_API AEntityBase : public AActor
 public:	
 
 
-
+	
 	UPROPERTY(EditAnywhere, Instanced, Category = "ECS")
 	TArray<UcomponentAuthorBase*> ecsComponents;
 	EntityID e;
 	// Sets default values for this actor's properties
 	AEntityBase();	
+
+//	void KnockBackTest(const FVector& DamageLocation, const FVector& DamageImpulse);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

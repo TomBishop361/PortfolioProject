@@ -6,14 +6,18 @@
 EntityID UECSManager::CreateEntity() {
 	EntityID newID = nextEntityID++;
     activeEntityCount++;
+    UE_LOG(LogTemp, Warning, TEXT("ActiveEntityes after Create %d"), activeEntityCount);
 	ActiveEntities.Add(newID);
 	return newID;
 }
 
 void UECSManager::DestroyEntity(EntityID entity)
 {
+    UE_LOG(LogTemp, Warning, TEXT("ActiveEntityes after Destroy"));
 	ActiveEntities.Remove(entity);
     activeEntityCount--;
+    
+    
 }
 
 bool UECSManager::isEntityValid(EntityID entity) const
@@ -47,18 +51,11 @@ void UECSManager::processDestructionRequests()
             if (FTransformLinkComponent* link = transformMap->Find(id)) {
                 if (IsValid(link->LinkedActor)) {
                     pendingActorDestroys.Add(link->LinkedActor);
-                }
-                else {
-                    // LinkComp exists, but no linked actor, remove entity immediately
-                    removeAllComponentsFromEntity(id);
-                    DestroyEntity(id);
-                }
-            }
-            else {
-                // No transform link comp. remove entity
-                removeAllComponentsFromEntity(id);
-                DestroyEntity(id);
-            }
+                    
+                }                
+            }    
+            removeAllComponentsFromEntity(id);
+            DestroyEntity(id);
         }
     }
     else {
@@ -68,13 +65,15 @@ void UECSManager::processDestructionRequests()
             DestroyEntity(id);
         }
     }
+
     
     entityPendingDestruction.Empty();
 
     //destroy the marked actors 
     for (TWeakObjectPtr<AActor> ActorPtr : pendingActorDestroys) {
         if (ActorPtr.IsValid()) {            
-            ActorPtr->Destroy();            
+            ActorPtr->Destroy();        
+
         }
     }
     pendingActorDestroys.Empty();

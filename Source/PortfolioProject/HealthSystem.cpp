@@ -12,8 +12,7 @@ void FHealthSystem::Perform(UECSManager* ECS)
 		if (auto healthMap = ECS->GetComponentMap<FHealthComponent>()) {			
 			for (auto [targetID , Request] : *DamageRequestMap) {
 				if (FHealthComponent* targetHealthComp = healthMap->Find(targetID))
-				{					
-					UE_LOG(LogTemp, Warning, TEXT("DamageRequestSeen"));
+				{	
 					targetHealthComp->CurrentHealth += Request.Damage;
 					targetHealthComp->CurrentHealth = FMath::Clamp(targetHealthComp->CurrentHealth, 0, targetHealthComp->MaxHealth);
 					UE_LOG(LogTemp, Warning, TEXT("Remaining Health %d"), targetHealthComp->CurrentHealth);

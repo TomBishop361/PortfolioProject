@@ -278,15 +278,16 @@ void ACombatCharacter::DoAttackTrace(FName DamageSourceBone)
 			{
 
 				DamageRequest.TargetID = Damageable->e;
-				DamageRequest.Damage = -15;
+				DamageRequest.Damage = -34;
 				
 				ECS->AddComponent<FDamageRequestComponent>(Damageable->e, DamageRequest);
 
 				//// knock upwards and away from the impact normal
-				//const FVector Impulse = (CurrentHit.ImpactNormal * -MeleeKnockbackImpulse) + (FVector::UpVector * MeleeLaunchImpulse);
+				const FVector Impulse = (CurrentHit.ImpactNormal * -MeleeKnockbackImpulse) + (FVector::UpVector * MeleeLaunchImpulse);
 
 				//// pass the damage event to the actor
 				//Damageable->ApplyDamage(MeleeDamage, this, CurrentHit.ImpactPoint, Impulse);
+				//Damageable->KnockBackTest(CurrentHit.ImpactPoint, Impulse);
 
 				//// call the BP handler to play effects, etc.
 				//DealtDamage(MeleeDamage, CurrentHit.ImpactPoint);

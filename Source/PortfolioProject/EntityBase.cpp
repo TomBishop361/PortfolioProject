@@ -19,9 +19,17 @@ AEntityBase::AEntityBase()
 
 	Capsule->InitCapsuleSize(34.f, 88.f);
 	Capsule->SetCollisionProfileName(TEXT("BlockAll"));
+	Capsule->SetMassOverrideInKg(NAME_None, 200.f, true);	
+	Capsule->SetLinearDamping(6.f);
+	Capsule->SetAngularDamping(12.f);
+	Capsule->BodyInstance.bLockXRotation = true;
+	Capsule->BodyInstance.bLockYRotation = true;
+	Capsule->BodyInstance.bLockZRotation = true;
 	Capsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
-	Capsule->SetSimulatePhysics(false);
+	Capsule->SetSimulatePhysics(true);
+
+
 	
 }
 
