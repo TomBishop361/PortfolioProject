@@ -15,7 +15,7 @@ void FHealthSystem::Perform(UECSManager* ECS)
 				{	
 					targetHealthComp->CurrentHealth += Request.Damage;
 					targetHealthComp->CurrentHealth = FMath::Clamp(targetHealthComp->CurrentHealth, 0, targetHealthComp->MaxHealth);
-					UE_LOG(LogTemp, Warning, TEXT("Remaining Health %d"), targetHealthComp->CurrentHealth);
+					
 					//Marks Damage Component for removal
 					ToRemove.Add(targetID);
 					if (targetHealthComp->CurrentHealth <= 0) {

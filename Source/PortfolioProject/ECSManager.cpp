@@ -5,15 +5,13 @@
 
 EntityID UECSManager::CreateEntity() {
 	EntityID newID = nextEntityID++;
-    activeEntityCount++;
-    UE_LOG(LogTemp, Warning, TEXT("ActiveEntityes after Create %d"), activeEntityCount);
+    activeEntityCount++;    
 	ActiveEntities.Add(newID);
 	return newID;
 }
 
 void UECSManager::DestroyEntity(EntityID entity)
-{
-    UE_LOG(LogTemp, Warning, TEXT("ActiveEntityes after Destroy"));
+{    
 	ActiveEntities.Remove(entity);
     activeEntityCount--;
     
