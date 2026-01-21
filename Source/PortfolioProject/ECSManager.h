@@ -6,6 +6,7 @@
 #include "SystemInterface.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "HealthSystem.h"
+#include "ComponentTypeID.h"
 #include "MovementSystem.h"
 #include "ECSManager.generated.h"
 
@@ -40,7 +41,7 @@ public:
 	template<typename T>
 	TMap<EntityID, T>* GetComponentMap()
 	{
-		FName typeName = FName(typeid(T).name());
+		int32 typeName = ComponentTypeID::GetTypeID<T>();
 
 		if (!ComponentStorage.Contains(typeName))
 		{
@@ -55,30 +56,30 @@ public:
 	void AddComponent(EntityID entity, const T& component) {
 
 
-		FName TypeName = FName(typeid(T).name());
+		int32 typeName = ComponentTypeID::GetTypeID<T>();
 
-		UE_LOG(LogTemp, Warning, TEXT("Value %s"), *TypeName.ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("Value %s"), *TypeName.ToString());
 		TSharedPtr<TComponentStorage<T>> TypedStorage;
 
-		if (ComponentStorage.Contains(TypeName)) {
+		if (ComponentStorage.Contains(typeName)) {
 			//TypedStorage = already existing sharedpointer
-			TypedStorage = StaticCastSharedPtr<TComponentStorage<T>>(ComponentStorage[TypeName]);
+			TypedStorage = StaticCastSharedPtr<TComponentStorage<T>>(ComponentStorage[typeName]);
 		}
 		else {
 			//Create new shared pointer and Add to ComponentStorage
 			TypedStorage = MakeShared<TComponentStorage<T>>();
-			ComponentStorage.Add(TypeName, TypedStorage);
+			ComponentStorage.Add(typeName, TypedStorage);
 		}
 		//Dereference shared pointer to access map object
 		TypedStorage->Data.Add(entity, component);
 
-		UE_LOG(LogTemp, Warning, TEXT("ComponentStorage is empty: %d"), ComponentStorage.IsEmpty() ? 1 : 0);
+		//UE_LOG(LogTemp, Warning, TEXT("ComponentStorage is empty: %d"), ComponentStorage.IsEmpty() ? 1 : 0);
 	}
 	
 	template<typename T>
 	void RemoveComponent(EntityID entity) {
-		FName typeName = FName(typeid(T).name());
-		if (!ComponentStorage.Contains(typeName)) {			
+		int32 typeName = ComponentTypeID::GetTypeID<T>();
+		if (!ComponentStorage.Contains(typeName)) {
 			return;
 		}
 		auto TypedStorage = StaticCastSharedPtr<TComponentStorage<T>>(ComponentStorage[typeName]);
@@ -110,7 +111,7 @@ public:
 			return Data.Num() == 0;
 		}
 	};
-	TMap<FName, TSharedPtr<IComponentStorage>> ComponentStorage;
+	TMap<int32, TSharedPtr<IComponentStorage>> ComponentStorage;
 
 private:
 	EntityID nextEntityID = 0;

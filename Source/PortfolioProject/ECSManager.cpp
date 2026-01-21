@@ -25,7 +25,7 @@ bool UECSManager::isEntityValid(EntityID entity) const
 
 void UECSManager::removeAllComponentsFromEntity(EntityID entity)
 {
-	TArray<FName> ToRemove;
+	TArray<int32> ToRemove;
 
 	for (auto It = ComponentStorage.CreateConstIterator(); It; ++It) {
 		It.Value()->RemoveEntity(entity);
@@ -34,7 +34,7 @@ void UECSManager::removeAllComponentsFromEntity(EntityID entity)
 			ToRemove.Add(It.Key());
 		}
 	}
-	for (const FName& Key : ToRemove)
+	for (const int32& Key : ToRemove)
 	{
 		ComponentStorage.Remove(Key);
 	}
