@@ -11,7 +11,7 @@
 #include "ECSManager.generated.h"
 
 
-using EntityID = uint32;
+using EntityID = int32;
 UCLASS()
 class PORTFOLIOPROJECT_API UECSManager : public UGameInstanceSubsystem
 {
@@ -36,10 +36,67 @@ public:
 	void processDestructionRequests();
 	
 
+	struct IComponentStorage
+	{
+		virtual ~IComponentStorage() = default;
+		//Pure Virtual
+		virtual void RemoveEntity(EntityID Entity) = 0;
+		virtual bool isEmpty() const = 0;
+	};
+
+	template<typename T>
+	struct TComponentStorage : IComponentStorage {
+		TArray<int32> sparse;
+		TArray<T> dense;
+		TArray<EntityID> entities;
+
+		void AddEntity(EntityID Entity, const T& Value)
+		{
+			if (sparse.Num() <= Entity)
+			{
+				//Grows array setting new values to 0. Last 
+				sparse.SetNumZeroed(Entity + 1);
+			}
+
+			//Stores Index of component in dense array
+			sparse[Entity] = dense.Add(Value);
+			entities.Add(Entity);
+		}
+		virtual void RemoveEntity(EntityID Entity) override
+		{
+			if (sparse.Num() > Entity && sparse[Entity] != INDEX_NONE)
+			{
+				//get component index
+				int32 indxToRemove = sparse[Entity];
+
+				// swaps removed entity's data with the last entry
+				dense[indxToRemove] = dense.Last();
+				entities[indxToRemove] = entities.Last();
+
+				// Update sparse value new dense index
+				sparse[entities[indxToRemove]] = indxToRemove;
+
+				// Remove the last item
+				dense.Pop();
+				entities.Pop();
+
+				// Mark entity as removed
+				sparse[Entity] = INDEX_NONE;
+			}
+		}
+
+		virtual bool isEmpty() const override
+		{
+			return dense.Num() == 0;
+		}
+	};
+
+	TMap<int32, TSharedPtr<IComponentStorage>> ComponentStorage;
+
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	
 	template<typename T>
-	TMap<EntityID, T>* GetComponentMap()
+	TComponentStorage<T>* GetComponentStorage()
 	{
 		int32 typeName = ComponentTypeID::GetTypeID<T>();
 
@@ -49,13 +106,11 @@ public:
 		}
 
 		auto TypedStorage = StaticCastSharedPtr<TComponentStorage<T>>(ComponentStorage[typeName]);
-		return &TypedStorage->Data;
+		return TypedStorage.Get();
 	}
 
 	template<typename T>
 	void AddComponent(EntityID entity, const T& component) {
-
-
 		int32 typeName = ComponentTypeID::GetTypeID<T>();
 
 		//UE_LOG(LogTemp, Warning, TEXT("Value %s"), *TypeName.ToString());
@@ -71,7 +126,7 @@ public:
 			ComponentStorage.Add(typeName, TypedStorage);
 		}
 		//Dereference shared pointer to access map object
-		TypedStorage->Data.Add(entity, component);
+		TypedStorage->AddEntity(entity, component);
 
 		//UE_LOG(LogTemp, Warning, TEXT("ComponentStorage is empty: %d"), ComponentStorage.IsEmpty() ? 1 : 0);
 	}
@@ -83,35 +138,14 @@ public:
 			return;
 		}
 		auto TypedStorage = StaticCastSharedPtr<TComponentStorage<T>>(ComponentStorage[typeName]);
-		TypedStorage->Data.Remove(entity);
+		TypedStorage->RemoveEntity(entity);
 
-		if (TypedStorage->Data.Num() == 0)
+		if (TypedStorage->isEmpty())
 		{
 			ComponentStorage.Remove(typeName);
 		}
-	}
+	}	
 
-	struct IComponentStorage
-	{
-		virtual ~IComponentStorage() = default;
-		//Pure Virtual
-		virtual void RemoveEntity(EntityID Entity) = 0;
-		virtual bool IsEmpty() const = 0;
-	};
-	template<typename T>
-	struct TComponentStorage : IComponentStorage
-	{
-		TMap<EntityID, T> Data;
-		virtual void RemoveEntity(EntityID Entity) override
-		{
-			Data.Remove(Entity);
-		}
-		virtual bool IsEmpty() const override
-		{
-			return Data.Num() == 0;
-		}
-	};
-	TMap<int32, TSharedPtr<IComponentStorage>> ComponentStorage;
 
 private:
 	EntityID nextEntityID = 0;

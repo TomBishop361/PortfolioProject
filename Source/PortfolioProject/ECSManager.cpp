@@ -30,7 +30,7 @@ void UECSManager::removeAllComponentsFromEntity(EntityID entity)
 	for (auto It = ComponentStorage.CreateConstIterator(); It; ++It) {
 		It.Value()->RemoveEntity(entity);
 
-		if (It.Value()->IsEmpty()) {
+		if (It.Value()->isEmpty()) {
 			ToRemove.Add(It.Key());
 		}
 	}
@@ -43,17 +43,19 @@ void UECSManager::removeAllComponentsFromEntity(EntityID entity)
 void UECSManager::processDestructionRequests()
 {
     // Check to see if TransfromLinkComp has Map
-    if (auto transformMap = GetComponentMap<FTransformLinkComponent>()) {
+    if (auto* transformStorage = GetComponentStorage<FTransformLinkComponent>()) {
         for (EntityID id : entityPendingDestruction) {
             //If component for Entity Exits & is Valid Mark Actor 
-            if (FTransformLinkComponent* link = transformMap->Find(id)) {
-                if (IsValid(link->LinkedActor)) {
-                    pendingActorDestroys.Add(link->LinkedActor);
-                    
-                }                
-            }    
-            removeAllComponentsFromEntity(id);
-            DestroyEntity(id);
+            int32 transformIndx = transformStorage->sparse[id];
+            if (transformIndx != INDEX_NONE) {
+                FTransformLinkComponent& link = transformStorage->dense[transformIndx];
+                    if (IsValid(link.LinkedActor)) {
+                        pendingActorDestroys.Add(link.LinkedActor);
+
+                    }       
+            }
+                removeAllComponentsFromEntity(id);
+                DestroyEntity(id);
         }
     }
     else {

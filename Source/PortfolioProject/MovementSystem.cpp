@@ -4,7 +4,7 @@
 #include "MovementSystem.h"
 
 
-void FMovementSystem::Perform(UECSManager* ECS) {	
+void FMovementSystem::Perform(UECSManager* ECS) {
 	if (!ECS) return;
 	// Try to get the player pawn once per tick
 	APawn* PlayerPawn = nullptr;
@@ -20,46 +20,53 @@ void FMovementSystem::Perform(UECSManager* ECS) {
 		return;
 	}
 
-	if (auto positionCompMap = ECS->GetComponentMap<FPositionComponent>()) {
-		if (auto transformMap = ECS->GetComponentMap<FTransformLinkComponent>()){
-			for (auto& [targetID, Position] : *positionCompMap) {
-				FTransformLinkComponent* transformLink = transformMap->Find(targetID);
+	auto* positionStorage = ECS->GetComponentStorage<FPositionComponent>();
+	auto* transformStorage = ECS->GetComponentStorage<FTransformLinkComponent>();
+	if (positionStorage) {
+		if (transformStorage){
+			for (int32 i = 0; i < transformStorage->dense.Num(); i++) {
 
-				if (!transformLink)
-				{
-					continue;
+				EntityID targetID = positionStorage->entities[i];
+				FPositionComponent& entityPositionComp = positionStorage->dense[i];
+
+				int32 transformIndx = transformStorage->sparse[targetID];
+
+				if (transformIndx != INDEX_NONE) {
+
+					FTransformLinkComponent& transformLink = transformStorage->dense[transformIndx];
+					
+
+					AActor* LinkedActor = transformLink.LinkedActor;
+					if (!LinkedActor || !IsValid(LinkedActor)) {
+						continue;
+					}
+					UWorld* ActorWorld = LinkedActor->GetWorld();
+					if (!ActorWorld) {
+						continue;
+					}
+
+					// Use cached player pawn (ensure it's in same world)
+					if (PlayerPawn->GetWorld() != ActorWorld) {
+						// Different world — skip
+						continue;
+					}
+
+					FVector playerPos = PlayerPawn->GetActorLocation();
+
+
+					FVector CurrentPos(entityPositionComp.x, entityPositionComp.y, entityPositionComp.z);
+					FVector Delta((playerPos - CurrentPos).GetSafeNormal());
+
+					FHitResult Hit;
+
+					LinkedActor->AddActorWorldOffset(Delta, true, &Hit);
+
+					FVector ActualLocation = transformLink.LinkedActor->GetActorLocation();
+					entityPositionComp.x = ActualLocation.X;
+					entityPositionComp.y = ActualLocation.Y;
+					entityPositionComp.z = ActualLocation.Z;
 				}
-
-				AActor* LinkedActor = transformLink->LinkedActor;
-				if (!LinkedActor || !IsValid(LinkedActor)) {
-					continue;
-				}
-				UWorld* ActorWorld = LinkedActor->GetWorld();
-				if (!ActorWorld) {
-					continue;
-				}
-
-				// Use cached player pawn (ensure it's in same world)
-				if (PlayerPawn->GetWorld() != ActorWorld) {
-					// Different world — skip
-					continue;
-				}
-				
-				FVector playerPos = PlayerPawn->GetActorLocation();
-				
-				
-				FVector CurrentPos (Position.x, Position.y, Position.z);
-				FVector Delta ((playerPos- CurrentPos).GetSafeNormal());
-
-				FHitResult Hit;				
-				
-				LinkedActor->AddActorWorldOffset(Delta, true, &Hit);
-
-				FVector ActualLocation = transformLink->LinkedActor->GetActorLocation();
-				Position.x = ActualLocation.X;
-				Position.y = ActualLocation.Y;
-				Position.z = ActualLocation.Z;
+			}
 			}
 		}
-	}
 }

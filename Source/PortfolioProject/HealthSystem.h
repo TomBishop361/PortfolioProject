@@ -9,7 +9,7 @@
 
 struct PORTFOLIOPROJECT_API FHealthSystem : public ISystemInterface
 {
-	
+	class ECSManager;
 public:
 	void Perform(UECSManager* ECS) override;
 

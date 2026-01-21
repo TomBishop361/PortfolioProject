@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DamageRequestComponent.generated.h"
-using EntityID = uint32;
+using EntityID = int32;
 /**
  * 
  */
