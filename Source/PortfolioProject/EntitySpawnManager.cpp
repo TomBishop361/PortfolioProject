@@ -44,8 +44,7 @@ void AEntitySpawnManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);    
     if (ECS) {
-        if (ECS->activeEntityCount < SpawnAmount) {
-            UE_LOG(LogTemp, Warning, TEXT("Gettin' ECS"));
+        if (ECS->activeEntityCount < SpawnAmount) {            
             SpawnECSActor();
         }
     }
