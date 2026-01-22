@@ -27,7 +27,7 @@ AEntityBase::AEntityBase()
 	Capsule->BodyInstance.bLockZRotation = true;
 	Capsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
-	Capsule->SetSimulatePhysics(false);
+	Capsule->SetSimulatePhysics(true);
 
 
 	
